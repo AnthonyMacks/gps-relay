@@ -1,8 +1,6 @@
 import express from "express";
-import fetch from "node-fetch";
 
 const app = express();
-
 app.use(express.json());
 
 app.post("/relay", async (req, res) => {
@@ -12,7 +10,8 @@ app.post("/relay", async (req, res) => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(req.body)
     });
-    const result = await response.text();
+
+    const result = await response.text(); // Adjust this to .json() if needed
     console.log("✅ Relayed:", req.body);
     res.status(200).send(result);
   } catch (err) {
@@ -23,5 +22,5 @@ app.post("/relay", async (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`🚀 Relay running on port ${PORT}`);
+  console.log(`🚀 Relay server running on port ${PORT}`);
 });
