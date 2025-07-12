@@ -11,6 +11,7 @@ primary_region = "syd"
 [[services]]
   internal_port = 3000
   protocol = "tcp"
+  processes = ["app"]  # 🔧 This is the missing piece
 
   [[services.ports]]
     handlers = ["http"]
