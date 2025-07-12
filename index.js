@@ -3,6 +3,11 @@ import express from "express";
 const app = express();
 app.use(express.json());
 
+// 🌐 New: Browser-friendly GET /
+app.get("/", (req, res) => {
+  res.send("🛰️ GPS Relay Server is running. POST GPS data to /relay.");
+});
+
 app.post("/relay", async (req, res) => {
   try {
     const response = await fetch("https://gps-tracker-69gb.onrender.com/gps", {
