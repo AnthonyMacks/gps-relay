@@ -34,9 +34,9 @@
       attribution: "© OpenStreetMap contributors"
     }).addTo(map);
 
-    const socket = io(); // Assumes same host; use full URL if needed
-    const gpsTrail = [];
-    let lastPoint = null;
+    const socket = io();
+
+    const gpsTrails = {}; // Trails per device_id
 
     function addLabeledCircle(point) {
       const lat = parseFloat(point.latitude);
@@ -59,14 +59,11 @@
       L.marker([lat, lon], { icon: label, interactive: false }).addTo(map);
     }
 
-    function addTrail(point) {
-      const lat = parseFloat(point.latitude);
-      const lon = parseFloat(point.longitude);
-      gpsTrail.push([lat, lon]);
+    function drawTrail(device_id) {
+      const trail = gpsTrails[device_id];
+      if (trail.length < 2) return;
 
-      if (gpsTrail.length > 100) gpsTrail.shift();
-
-      L.polyline(gpsTrail, {
+      L.polyline(trail, {
         color: '#1ABC9C',
         weight: 3,
         opacity: 0.7
@@ -74,13 +71,10 @@
     }
 
     function addArrow(p1, p2) {
-      const latMid = (parseFloat(p1.latitude) + parseFloat(p2.latitude)) / 2;
-      const lonMid = (parseFloat(p1.longitude) + parseFloat(p2.longitude)) / 2;
+      const latMid = (p1[0] + p2[0]) / 2;
+      const lonMid = (p1[1] + p2[1]) / 2;
 
-      const angleRad = Math.atan2(
-        parseFloat(p2.longitude) - parseFloat(p1.longitude),
-        parseFloat(p2.latitude) - parseFloat(p1.latitude)
-      );
+      const angleRad = Math.atan2(p2[1] - p1[1], p2[0] - p1[0]);
       const angleDeg = angleRad * (180 / Math.PI);
 
       const arrowIcon = L.divIcon({
@@ -94,17 +88,32 @@
     }
 
     socket.on("gps_update", (data) => {
-      if (!data.latitude || !data.longitude || !data.device_id) return;
+      const { latitude, longitude, device_id } = data;
+      if (!latitude || !longitude || !device_id) return;
+
+      const lat = parseFloat(latitude);
+      const lon = parseFloat(longitude);
 
       addLabeledCircle(data);
 
-      if (lastPoint) {
-        addTrail(data);
-        addArrow(lastPoint, data);
+      if (!gpsTrails[device_id]) {
+        gpsTrails[device_id] = [];
       }
 
-      lastPoint = data;
-      console.log(`📍 ${data.device_id} → (${data.latitude}, ${data.longitude})`);
+      const trail = gpsTrails[device_id];
+      trail.push([lat, lon]);
+
+      if (trail.length > 100) trail.shift();
+
+      drawTrail(device_id);
+
+      if (trail.length >= 2) {
+        const p1 = trail[trail.length - 2];
+        const p2 = trail[trail.length - 1];
+        addArrow(p1, p2);
+      }
+
+      console.log(`📍 ${device_id} → (${lat}, ${lon})`);
     });
   </script>
 </body>
