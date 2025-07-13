@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html>
 <head>
@@ -19,4 +20,27 @@
     });
   </script>
 </body>
+=======
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Live GPS Dashboard</title>
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+</head>
+<body>
+  <h2>📍 Incoming GPS Data</h2>
+  <pre id="output">Waiting for data...</pre>
+
+  <script>
+    const output = document.getElementById("output");
+    const socket = io("http://localhost:4000");
+
+    socket.on("gps_update", (data) => {
+      const formatted = JSON.stringify(data, null, 2);
+      output.textContent = formatted;
+      console.log("📡 GPS Update:", data);
+    });
+  </script>
+</body>
+>>>>>>> 6ea2398 (Initial project setup with relay, map, worker, and supporting files)
 </html>
