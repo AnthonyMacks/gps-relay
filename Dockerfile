@@ -1,23 +1,17 @@
-# 🟦 Use Node.js base image (if you still need it)
+# Use Node.js base image
 FROM node:18
 
-# 🧰 Install Python (minimal)
-RUN apt-get update && \
-    apt-get install -y python3 python3-pip && \
-    pip3 install flask requests
-
-# 📁 Set working directory
+# Set working directory
 WORKDIR /app
 
-# 📦 Install Node dependencies (optional if index.js is used)
-COPY package*.json ./
-RUN npm install
-
-# 🔁 Copy all app files (including gps-relay.py)
+# Copy everything
 COPY . .
 
-# 🌐 Expose relay port
+# Install dependencies
+RUN npm install
+
+# Expose the port (relay server listens here)
 EXPOSE 3000
 
-# 🚀 Start the Python GPS relay
-CMD ["python3", "gps-relay.py"]
+# Launch relay server
+CMD ["node", "index.js"]
