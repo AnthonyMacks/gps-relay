@@ -15,6 +15,7 @@ def relay():
         # 📨 Read JSON payload
         data = request.get_json(force=True)
         logging.info("📥 Received GPS from device: %s", data)
+        print(f"📥 Received GPS from device: {data}")
 
         # 🔁 Forward to Render
         response = requests.post(RENDER_URL, json=data, headers={"Content-Type": "application/json"})
