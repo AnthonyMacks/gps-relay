@@ -7,7 +7,6 @@ primary_region = "syd"
 
 [processes]
   app = "node index.js"
-  worker = "node gps-worker.js"  # 🆕 GPS relay worker
 
 [[services]]
   internal_port = 3000
@@ -31,25 +30,6 @@ primary_region = "syd"
     method = "get"
     protocol = "http"
     port = 3000
-
-[[services]]
-  internal_port = 4000
-  protocol = "tcp"
-  processes = ["worker"]  # 🛠️ Connect service to GPS worker
-
-  [[services.ports]]
-    handlers = ["http"]
-    port = 81  # 🛰️ External port for GPS POSTs
-
-  [[services.checks]]
-    interval = "10s"
-    timeout = "5s"
-    grace_period = "5s"
-    type = "http"
-    path = "/gps"
-    method = "post"
-    protocol = "http"
-    port = 4000
 
 [experimental]
   auto_rollback = true
