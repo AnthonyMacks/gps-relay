@@ -1,17 +1,19 @@
-# Use Node.js base image
-FROM node:18
+# Use official Python image
+FROM python:3.11-slim
 
 # Set working directory
 WORKDIR /app
 
-# Copy everything
+# Install dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy app code into the container
 COPY . .
 
-# Install dependencies
-RUN npm install
-
-# Expose the port (relay server listens here)
+# Expose the port your app runs on (Fly uses 3000 by default)
+ENV PORT=3000
 EXPOSE 3000
 
-# Launch relay server
-CMD ["node", "index.js"]
+# Run the Flask app
+CMD ["python", "gps-relay.py"]
