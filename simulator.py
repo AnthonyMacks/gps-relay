@@ -12,7 +12,7 @@ MAX_LON_OFFSET = 0.0180
 DEVICE_IDS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X']
 
 # 🌐 Fly.io GPS relay endpoint
-RELAY_URL = "https://gps-relay.fly.dev/relay"  # ← Replace with your actual endpoint
+RELAY_URL = "https://gps-relay.fly.dev/gps"  # ← Replace with your actual endpoint
 
 def generate_point(center_lat, center_lon):
     lat = round(center_lat + random.uniform(-MAX_LAT_OFFSET, MAX_LAT_OFFSET), 6)
