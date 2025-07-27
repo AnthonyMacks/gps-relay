@@ -4,6 +4,8 @@ import fetch from "node-fetch"; // Ensure this is installed via `npm install nod
 const app = express();
 app.use(express.json());
 
+console.log("🧪 TEST LOG: Deployed code is active.");
+
 // 🛰️ Simple status route
 app.get("/", (req, res) => {
   res.send("🛰️ GPS Relay Server is running. POST GPS data to /relay.");
