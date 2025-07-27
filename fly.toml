@@ -6,7 +6,7 @@ primary_region = "syd"
   dockerfile = "Dockerfile"
 
 [processes]
-  app = "node index.js"
+  app = "python gps-relay.py"
 
 [[services]]
   internal_port = 3000
