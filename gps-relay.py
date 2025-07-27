@@ -61,6 +61,6 @@ def health():
     return "🟢 Fly relay is up and forwarding GPS data."
 
 if __name__ == "__main__":
-    PORT = int(os.environ.get("PORT", 3000))
+    PORT = int(os.environ.get("PORT", 10000))
     app.run(host="0.0.0.0", port=PORT)
 
