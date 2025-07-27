@@ -13,8 +13,11 @@ app.get("/", (req, res) => {
 app.post("/relay", async (req, res) => {
   const gpsData = req.body;
 
+  // 📝 Log incoming data with timestamp
+  console.log(`[${new Date().toISOString()}] 📥 Received GPS data:`, gpsData);
+
   if (!gpsData || !gpsData.latitude || !gpsData.longitude || !gpsData.device_id) {
-    console.warn("⚠️ Invalid GPS payload:", gpsData);
+    console.warn(`[${new Date().toISOString()}] ⚠️ Invalid GPS payload:`, gpsData);
     return res.status(400).send({ error: "Invalid GPS data" });
   }
 
@@ -25,17 +28,17 @@ app.post("/relay", async (req, res) => {
       body: JSON.stringify(gpsData),
     });
 
-    const result = await response.text(); // Switch to .json() if your Render route returns JSON
+    const result = await response.text(); // Use .json() if you expect JSON
+    console.log(`[${new Date().toISOString()}] ✅ Relayed to Render:`, gpsData);
 
-    console.log("✅ Relayed to Render:", gpsData);
     res.status(200).send(result);
   } catch (err) {
-    console.error("❌ Relay error:", err.message || err);
+    console.error(`[${new Date().toISOString()}] ❌ Relay error:`, err.message || err);
     res.status(500).send({ error: "Relay failed", details: err.message });
   }
 });
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`🚀 GPS Relay server running on port ${PORT}`);
+  console.log(`[${new Date().toISOString()}] 🚀 GPS Relay server running on port ${PORT}`);
 });
