@@ -12,7 +12,7 @@ MAX_LON_OFFSET = 0.0180
 DEVICE_IDS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X']
 
 # 🌐 Fly.io GPS relay endpoint
-RELAY_URL = "https://gps-relay.fly.dev/gps"  # ← Replace with your actual endpoint
+RELAY_URL = "https://gps-relay.fly.dev/gps"
 
 def generate_point(center_lat, center_lon):
     lat = round(center_lat + random.uniform(-MAX_LAT_OFFSET, MAX_LAT_OFFSET), 6)
@@ -33,9 +33,9 @@ def build_packet(device_id):
 def send_packet(packet):
     try:
         response = requests.post(RELAY_URL, json=packet)
-        print(f"✅ Sent → {packet['device_id']} @ {packet['latitude']}, {packet['longitude']} ({response.status_code})")
+        print(f"SUCCESS: Sent {packet['device_id']} at {packet['latitude']}, {packet['longitude']} (status: {response.status_code})")
     except Exception as e:
-        print(f"⚠️ Failed → {e}")
+        print(f"ERROR: Failed to send - {e}")
 
 def run_simulator(interval=10):
     while True:
@@ -45,5 +45,5 @@ def run_simulator(interval=10):
         time.sleep(interval)
 
 if __name__ == "__main__":
-    print("🚀 GPS simulator running... Ctrl+C to stop.")
+    print("GPS simulator running... Ctrl+C to stop.")
     run_simulator()
