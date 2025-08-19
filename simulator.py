@@ -1,12 +1,12 @@
 import time, random, json, requests
 
 # 🌏 Center on Sydney CBD
-SYDNEY_LAT = -33.8688
-SYDNEY_LON = 151.2093
+SYDNEY_LAT = -32.7585
+SYDNEY_LON = 151.1745
 
 # 🎯 Spread radius (~1.5km)
-MAX_LAT_OFFSET = 0.0135
-MAX_LON_OFFSET = 0.0180
+MAX_LAT_OFFSET = 0.02
+MAX_LON_OFFSET = 0.02
 
 # 🆔 Test devices
 DEVICE_IDS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X']
