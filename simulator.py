@@ -9,7 +9,7 @@ MAX_LAT_OFFSET = 0.02
 MAX_LON_OFFSET = 0.02
 
 # 🆔 Test devices
-DEVICE_IDS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X']
+DEVICE_IDS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII', 'XIII', 'XIV', 'XV']
 
 # 🌐 Fly.io GPS relay endpoint
 RELAY_URL = "https://gps-relay.fly.dev/relay"
