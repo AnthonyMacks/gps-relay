@@ -9,8 +9,8 @@ VALID_LAT_OFFSET = 0.035
 VALID_LON_OFFSET = 0.035
 
 # 💥 Spread radius for INVALID data (>5km to trigger rejection)
-INVALID_LAT_OFFSET = 0.08
-INVALID_LON_OFFSET = 0.08
+INVALID_LAT_OFFSET = 0.10  # Increased to ~11km to guarantee >5km
+INVALID_LON_OFFSET = 0.10
 
 # 🆔 Test devices
 DEVICE_IDS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII', 
@@ -21,7 +21,7 @@ DEVICE_IDS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI',
 RELAY_URL = "https://gps-relay.fly.dev/relay"
 
 # 🎲 Percentage of invalid data to generate (0-100)
-INVALID_DATA_PERCENTAGE = 20  # 20% of packets will be invalid
+INVALID_DATA_PERCENTAGE = 30  # Increased to 30% for more testing
 
 def generate_valid_point(center_lat, center_lon):
     """Generate point within ~4km of center (will pass 5km validation)"""
@@ -31,8 +31,10 @@ def generate_valid_point(center_lat, center_lon):
 
 def generate_invalid_point(center_lat, center_lon):
     """Generate point >5km from center (will be rejected)"""
-    lat = round(center_lat + random.uniform(-INVALID_LAT_OFFSET, INVALID_LAT_OFFSET), 6)
-    lon = round(center_lon + random.uniform(-INVALID_LON_OFFSET, INVALID_LON_OFFSET), 6)
+    # Force points to be far from center
+    direction = random.choice([-1, 1])
+    lat = round(center_lat + (direction * random.uniform(0.06, INVALID_LAT_OFFSET)), 6)
+    lon = round(center_lon + (direction * random.uniform(0.06, INVALID_LON_OFFSET)), 6)
     return lat, lon
 
 def generate_bad_coordinates():
@@ -41,7 +43,6 @@ def generate_bad_coordinates():
         (999.999, 999.999),  # Out of range
         (-91.0, 181.0),       # Out of bounds
         (0.0, 0.0),           # Null island
-        (None, None),         # Null values
     ]
     return random.choice(invalid_types)
 
@@ -49,11 +50,12 @@ def build_packet(device_id):
     """Build GPS packet - can be valid or invalid based on percentage"""
     
     # Decide if this packet should be invalid
-    is_invalid = random.randint(1, 100) <= INVALID_DATA_PERCENTAGE
+    rand_val = random.random() * 100
+    is_invalid = rand_val <= INVALID_DATA_PERCENTAGE
     
     if is_invalid:
         # Choose type of invalid data
-        invalid_type = random.choice(['far_distance', 'bad_coords', 'low_sats', 'missing_field'])
+        invalid_type = random.choice(['far_distance', 'far_distance', 'bad_coords', 'missing_field'])
         
         if invalid_type == 'far_distance':
             # Point beyond 5km limit
@@ -66,7 +68,7 @@ def build_packet(device_id):
                 "timestamp": timestamp,
                 "sats": random.randint(1, 20)
             }
-            print(f"🚫 INVALID (>5km): {device_id}")
+            print(f"🚫 INVALID (>5km): {device_id} at {lat}, {lon}")
             
         elif invalid_type == 'bad_coords':
             # Completely invalid coordinates
@@ -74,25 +76,12 @@ def build_packet(device_id):
             timestamp = time.strftime("%Y-%m-%d %H:%M:%S")
             packet = {
                 "device_id": device_id,
-                "latitude": str(lat) if lat is not None else "NaN",
-                "longitude": str(lon) if lon is not None else "NaN",
-                "timestamp": timestamp,
-                "sats": random.randint(5, 12)
-            }
-            print(f"🚫 INVALID (bad coords): {device_id}")
-            
-        elif invalid_type == 'low_sats':
-            # Low satellite count (< 4 triggers warning)
-            lat, lon = generate_valid_point(SYDNEY_LAT, SYDNEY_LON)
-            timestamp = time.strftime("%Y-%m-%d %H:%M:%S")
-            packet = {
-                "device_id": device_id,
                 "latitude": str(lat),
                 "longitude": str(lon),
                 "timestamp": timestamp,
-                "sats": random.randint(0, 3)  # Low sat count
+                "sats": random.randint(1, 20)
             }
-            print(f"⚠️  LOW SATS: {device_id} (sats={packet['sats']})")
+            print(f"🚫 INVALID (bad coords): {device_id} at {lat}, {lon}")
             
         else:  # missing_field
             # Missing required field
@@ -104,7 +93,7 @@ def build_packet(device_id):
                 "latitude": str(lat),
                 "longitude": str(lon),
                 "timestamp": timestamp,
-                "sats": random.randint(5, 12)
+                "sats": random.randint(1, 20)
             }
             del packet[missing]  # Remove a required field
             print(f"🚫 INVALID (missing {missing}): {device_id}")
@@ -118,9 +107,11 @@ def build_packet(device_id):
             "latitude": str(lat),
             "longitude": str(lon),
             "timestamp": timestamp,
-            "sats": random.randint(4, 12)
+            "sats": random.randint(1, 20)
         }
-        print(f"✅ VALID: {device_id} at {lat}, {lon}")
+        sats = packet['sats']
+        sat_indicator = "⚠️" if sats < 4 else "✅"
+        print(f"{sat_indicator} VALID: {device_id} at {lat}, {lon} (sats={sats})")
     
     return packet
 
@@ -144,8 +135,9 @@ def run_simulator(interval=10, packets_per_cycle=5):
     """
     print(f"🚀 GPS Simulator Starting...")
     print(f"📍 Center: {SYDNEY_LAT}, {SYDNEY_LON}")
-    print(f"🎯 Valid radius: ~4km, Invalid radius: ~7km")
+    print(f"🎯 Valid radius: ~4km, Invalid radius: ~8-11km")
     print(f"💥 Invalid data rate: {INVALID_DATA_PERCENTAGE}%")
+    print(f"🛰️  Satellite range: 1-20")
     print(f"⏱️  Update interval: {interval}s")
     print(f"📦 Packets per cycle: {packets_per_cycle}")
     print(f"🔄 Total devices: {len(DEVICE_IDS)}")
