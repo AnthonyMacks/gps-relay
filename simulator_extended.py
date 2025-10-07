@@ -4,9 +4,9 @@ import time, random, json, requests
 SYDNEY_LAT = -33.4452
 SYDNEY_LON = 150.1528
 
-# 🎯 Spread radius (~1km)
-MAX_LAT_OFFSET = 0.0067
-MAX_LON_OFFSET = 0.0067
+# 🎯 Spread radius (~6km)
+MAX_LAT_OFFSET = 0.04
+MAX_LON_OFFSET = 0.04
 
 # 🆔 Test devices
 DEVICE_IDS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII', 'XIII', 'XIV', 'XV', 'XVI', 'XVII', 'XVIII', 'XIX', 'XX', 'XXI', 'XXII', 'XXIII', 'XXIV', 'XXV', 'XXVI', 'XXVII' , 'XXVIII' , 'XXIX' , 'XXX']
