@@ -1,12 +1,12 @@
 import time, random, json, requests
 
-# 🌏 Center on Ex Admin Bravo - NAVEX
+# 🌏 Center on Maranagaroo Military Training Area - NAVEX
 SYDNEY_LAT = -33.4452
 SYDNEY_LON = 150.1528
 
 # 🎯 Spread radius (~6km)
-MAX_LAT_OFFSET = 0.04
-MAX_LON_OFFSET = 0.04
+MAX_LAT_OFFSET = 0.05
+MAX_LON_OFFSET = 0.05
 
 # 🆔 Test devices
 DEVICE_IDS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII', 'XIII', 'XIV', 'XV', 'XVI', 'XVII', 'XVIII', 'XIX', 'XX', 'XXI', 'XXII', 'XXIII', 'XXIV', 'XXV', 'XXVI', 'XXVII' , 'XXVIII' , 'XXIX' , 'XXX']
