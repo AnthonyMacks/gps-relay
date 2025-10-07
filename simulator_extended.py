@@ -64,7 +64,7 @@ def build_packet(device_id):
                 "latitude": str(lat),
                 "longitude": str(lon),
                 "timestamp": timestamp,
-                "sats": random.randint(5, 12)
+                "sats": random.randint(1, 20)
             }
             print(f"🚫 INVALID (>5km): {device_id}")
             
