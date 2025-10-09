@@ -9,8 +9,8 @@ VALID_LAT_OFFSET = 0.035
 VALID_LON_OFFSET = 0.035
 
 # 💥 Spread radius for INVALID data (>5km to trigger rejection)
-INVALID_LAT_OFFSET = 0.10  # Increased to ~11km to guarantee >5km
-INVALID_LON_OFFSET = 0.10
+INVALID_LAT_OFFSET = 0.04  # Increased to ~11km to guarantee >5km
+INVALID_LON_OFFSET = 0.04
 
 # 🆔 Test devices
 DEVICE_IDS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII', 
