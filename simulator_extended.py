@@ -1,8 +1,8 @@
 import time, random, json, requests
 
 # 🌏 Center on Maranagaroo Military Training Area - NAVEX
-SYDNEY_LAT = -33.4452
-SYDNEY_LON = 150.1528
+SYDNEY_LAT = -33.8411
+SYDNEY_LON = 151.2058
 
 # 🎯 Spread radius for VALID data (~4km - within 5km limit)
 VALID_LAT_OFFSET = 0.035
